@@ -41,15 +41,14 @@ def nc_only_bot():
             groups = [t for t in threads if getattr(t, "is_group", False)]
             
             if not groups:
-                log("⚠ No groups found, retrying in 30s...")
+                log("⚠ No groups found, retrying...")
                 time.sleep(30)
                 continue
 
             log(f"🔄 ROUND {round_number} | Found {len(groups)} groups")
 
             for thread in groups:
-                if not state["running"]:
-                    break
+                if not state["running"]: break
                 
                 gid = thread.id
                 title = thread.thread_title or "Unknown"
