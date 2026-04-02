@@ -54,19 +54,17 @@ def nc_only_bot():
                 gid = thread.id
                 title = thread.thread_title or "Unknown"
 
-                # Name Change
                 new_name = f"{cfg['group_name']} → {datetime.now().strftime('%I:%M:%S %p')}"
                 try:
                     cl.direct_thread_change_title(gid, new_name)
                     log(f"💠 NC SUCCESS → {title}")
-                except Exception as e:
+                except Exception:
                     try:
                         cl.direct_thread_update_group_name(gid, new_name)
                         log(f"💠 NC SUCCESS → {title}")
                     except:
-                        log(f"⚠ NC FAILED in {title} (retrying next round)")
+                        log(f"⚠ NC FAILED in {title} (continuing...)")
 
-                # Group Switch Delay
                 time.sleep(cfg["group_delay"] + random.uniform(1, 3))
 
             log(f"✔ ROUND {round_number} Complete")
