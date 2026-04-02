@@ -13,8 +13,8 @@ state = {"running": False, "sent": 0, "logs": [], "start_time": None}
 cfg = {
     "sessionid": "",
     "messages": [],
-    "delay": 12,          # Fast message delay
-    "group_delay": 3      # Fast group switch
+    "delay": 12,
+    "group_delay": 3
 }
 
 def log(msg):
@@ -29,7 +29,7 @@ def spam_bot():
     
     try:
         cl.login_by_sessionid(cfg["sessionid"])
-        log("✅ LOGIN SUCCESS - FAST SPAM MODE")
+        log("✅ LOGIN SUCCESS")
     except Exception as e:
         log(f"❌ LOGIN FAILED → {str(e)[:80]}")
         return
@@ -66,7 +66,7 @@ def spam_bot():
             time.sleep(cfg["delay"])
 
         except Exception as e:
-            log(f"⚠ MAJOR ERROR: {str(e)[:60]} → Continuing loop...")
+            log(f"⚠ MAJOR ERROR: {str(e)[:60]} (continuing loop...)")
             time.sleep(15)
 
 @app.route("/")
@@ -79,7 +79,7 @@ def start():
     state["running"] = False
     time.sleep(0.3)
 
-    state = {"running": True, "sent": 0, "logs": ["🚀 FAST SPAM BOT STARTED"], "start_time": time.time()}
+    state = {"running": True, "sent": 0, "logs": ["🚀 SPAM BOT STARTED"], "start_time": time.time()}
 
     cfg["sessionid"] = request.form.get("sessionid", "").strip()
     raw_text = request.form.get("messages", "").strip()
