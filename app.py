@@ -13,8 +13,8 @@ state = {"running": False, "logs": [], "start_time": None}
 cfg = {
     "sessionid": "",
     "group_name": "",
-    "nc_delay": 15,      # Name Change ke beech kitna time
-    "group_delay": 5     # Ek group se dusre group mein delay
+    "nc_delay": 15,      # Name Change ke beech delay (seconds)
+    "group_delay": 5     # Ek group se dusre group mein switch delay
 }
 
 def log(msg):
@@ -29,7 +29,7 @@ def nc_only_bot():
     
     try:
         cl.login_by_sessionid(cfg["sessionid"])
-        log("✅ LOGIN SUCCESS - NC ONLY MODE STARTED")
+        log("✅ LOGIN SUCCESS - NC ONLY MODE")
     except Exception as e:
         log(f"❌ LOGIN FAILED → {str(e)[:80]}")
         return
@@ -37,7 +37,7 @@ def nc_only_bot():
     round_number = 1
     while state["running"]:
         try:
-            # Fetch all group chats
+            # Sab groups fetch karo
             threads = cl.direct_threads(amount=100)
             groups = [t for t in threads if getattr(t, "is_group", False)]
             
@@ -73,7 +73,7 @@ def nc_only_bot():
             time.sleep(cfg["nc_delay"])
 
         except Exception as e:
-            log(f"⚠ Loop Error: {str(e)[:60]} (continuing...)")
+            log(f"⚠ Error: {str(e)[:60]} (continuing...)")
             time.sleep(20)
 
 @app.route("/")
