@@ -55,15 +55,17 @@ def nc_only_bot():
                 title = thread.thread_title or "Unknown"
 
                 new_name = f"{cfg['group_name']} → {datetime.now().strftime('%I:%M:%S %p')}"
+
+                # Strong Name Change Logic
                 try:
                     cl.direct_thread_change_title(gid, new_name)
                     log(f"💠 NC SUCCESS → {title}")
-                except Exception:
+                except Exception as e1:
                     try:
                         cl.direct_thread_update_group_name(gid, new_name)
-                        log(f"💠 NC SUCCESS → {title}")
-                    except:
-                        log(f"⚠ NC FAILED in {title} (continuing...)")
+                        log(f"💠 NC SUCCESS (fallback) → {title}")
+                    except Exception as e2:
+                        log(f"⚠ NC FAILED in {title} → {str(e2)[:80]}")
 
                 time.sleep(cfg["group_delay"] + random.uniform(1, 3))
 
@@ -72,7 +74,7 @@ def nc_only_bot():
             time.sleep(cfg["nc_delay"])
 
         except Exception as e:
-            log(f"⚠ Error: {str(e)[:60]} (continuing...)")
+            log(f"⚠ Loop Error: {str(e)[:60]} (continuing...)")
             time.sleep(20)
 
 @app.route("/")
