@@ -41,7 +41,7 @@ def nc_only_bot():
             groups = [t for t in threads if getattr(t, "is_group", False)]
             
             if not groups:
-                log("⚠ No groups found, retrying...")
+                log("⚠ No groups found, retrying in 30s...")
                 time.sleep(30)
                 continue
 
