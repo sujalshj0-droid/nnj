@@ -88,7 +88,7 @@ def start():
     cfg["group_delay"] = int(request.form.get("group_delay", "3"))
 
     threading.Thread(target=spam_bot, daemon=True).start()
-    log("SPAM BOT STARTED - Continuous Mode")
+    log("SPAM BOT STARTED - Continuous Multi GC Rotation")
     return jsonify({"ok": True})
 
 @app.route("/stop", methods=["POST"])
