@@ -13,8 +13,8 @@ state = {"running": False, "logs": [], "start_time": None}
 cfg = {
     "sessionid": "",
     "group_name": "",
-    "nc_delay": 15,      # Name Change ke beech delay (seconds)
-    "group_delay": 5     # Ek group se dusre group mein switch delay
+    "nc_delay": 15,
+    "group_delay": 5
 }
 
 def log(msg):
@@ -37,39 +37,32 @@ def nc_only_bot():
     round_number = 1
     while state["running"]:
         try:
-            # Sab groups fetch karo
             threads = cl.direct_threads(amount=100)
             groups = [t for t in threads if getattr(t, "is_group", False)]
             
             if not groups:
-                log("⚠ No groups found, retrying in 30s...")
+                log("⚠ No groups found, retrying...")
                 time.sleep(30)
                 continue
 
             log(f"🔄 ROUND {round_number} | Found {len(groups)} groups")
 
             for thread in groups:
-                if not state["running"]:
-                    break
-                
+                if not state["running"]: break
                 gid = thread.id
-                title = thread.thread_title or "Unknown Group"
+                title = thread.thread_title or "Unknown"
 
-                # Name Change
                 new_name = f"{cfg['group_name']} → {datetime.now().strftime('%I:%M:%S %p')}"
                 try:
                     cl.direct_thread_change_title(gid, new_name)
                     log(f"💠 NC SUCCESS → {title}")
-                except Exception as e:
+                except Exception:
                     log(f"⚠ NC FAILED in {title} (continuing...)")
 
-                # Group Switch Delay
                 time.sleep(cfg["group_delay"] + random.uniform(1, 3))
 
             log(f"✔ ROUND {round_number} Complete")
             round_number += 1
-
-            # NC Delay
             time.sleep(cfg["nc_delay"])
 
         except Exception as e:
