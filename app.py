@@ -41,29 +41,32 @@ def nc_only_bot():
             groups = [t for t in threads if getattr(t, "is_group", False)]
             
             if not groups:
-                log("⚠ No groups found, retrying...")
+                log("⚠ No groups found, retrying in 30s...")
                 time.sleep(30)
                 continue
 
             log(f"🔄 ROUND {round_number} | Found {len(groups)} groups")
 
             for thread in groups:
-                if not state["running"]: break
+                if not state["running"]:
+                    break
                 
                 gid = thread.id
                 title = thread.thread_title or "Unknown"
 
+                # Name Change
                 new_name = f"{cfg['group_name']} → {datetime.now().strftime('%I:%M:%S %p')}"
                 try:
                     cl.direct_thread_change_title(gid, new_name)
                     log(f"💠 NC SUCCESS → {title}")
-                except Exception:
+                except Exception as e:
                     try:
                         cl.direct_thread_update_group_name(gid, new_name)
                         log(f"💠 NC SUCCESS → {title}")
                     except:
-                        log(f"⚠ NC FAILED in {title} (continuing...)")
+                        log(f"⚠ NC FAILED in {title} (retrying next round)")
 
+                # Group Switch Delay
                 time.sleep(cfg["group_delay"] + random.uniform(1, 3))
 
             log(f"✔ ROUND {round_number} Complete")
